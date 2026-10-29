@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>مفاجأة لأمي عائشة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ground: #FBF1EC;
+    --ink: #5A3346;
+    --ink-soft: #9C7183;
+    --rose: #D98A9E;
+    --rose-soft: #F3C9D4;
+    --gold: #C9A15A;
+    --flame: #E8A33D;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Tajawal', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+    overflow-x: hidden;
+  }
+  .stage { position: relative; width: 100%; max-width: 640px; }
+
+  #cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  #cover.hide { opacity: 0; transform: scale(0.94); pointer-events: none; }
+
+  .gift { width: 86px; height: 70px; position: relative; }
+  .gift .box { position: absolute; bottom: 0; width: 86px; height: 52px; background: var(--rose); border-radius: 6px; }
+  .gift .lid { position: absolute; top: 10px; width: 94px; height: 16px; left: -4px; background: var(--rose-soft); border-radius: 4px; }
+  .gift .ribbon-v { position: absolute; top: 0; left: 50%; width: 10px; height: 70px; transform: translateX(-50%); background: var(--gold); }
+  .gift .ribbon-h { position: absolute; top: 10px; width: 86px; height: 10px; background: var(--gold); }
+
+  #cover p.eyebrow { margin: 0; font-size: 16px; color: var(--ink-soft); }
+  #cover h1 { margin: 0; font-family: 'Amiri', serif; font-weight: 700; font-size: 34px; line-height: 1.4; max-width: 420px; }
+
+  button.cta {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #FFFFFF;
+    background: var(--rose);
+    border: none;
+    border-radius: 999px;
+    padding: 16px 44px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  button.cta:hover { background: #C97A90; }
+  button.cta:active { transform: scale(0.97); }
+  button.cta:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+  #surprise {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 34px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  #surprise.show { display: flex; opacity: 1; transform: translateY(0); }
+
+  .hearts { display: flex; align-items: flex-end; gap: 16px; color: var(--rose); }
+  .hearts svg:nth-child(1), .hearts svg:nth-child(3) { opacity: 0.55; }
+
+  #surprise .eyebrow { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: 1px; color: #C98098; }
+  #surprise h2 { margin: 8px 0 0; font-family: 'Amiri', serif; font-weight: 700; font-size: 44px; line-height: 1.35; color: var(--ink); }
+
+  .candles { display: flex; gap: 26px; margin-bottom: -8px; z-index: 2; }
+  .candle { width: 4px; background: var(--gold); border-radius: 2px; position: relative; }
+  .candle.short { height: 26px; }
+  .candle.tall { height: 34px; }
+  .flame { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 8px; height: 12px; background: var(--flame); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; }
+
+  .tier-top { width: 200px; height: 30px; background: var(--rose-soft); border-radius: 10px 10px 3px 3px; }
+  .tier-bottom { width: 240px; height: 44px; background: var(--rose); border-radius: 3px 3px 16px 16px; margin-top: 2px; }
+
+  .age-card { display: flex; align-items: center; gap: 22px; background: #FFFFFF; border-radius: 28px; padding: 26px 40px; }
+  .age-number { font-family: 'Amiri', serif; font-weight: 700; font-size: 76px; line-height: 1; color: var(--rose); }
+  .age-label { text-align: right; }
+  .age-label .big { font-size: 19px; font-weight: 700; }
+  .age-label .small { font-size: 14px; color: var(--ink-soft); margin-top: 4px; max-width: 160px; }
+
+  #surprise p.message { margin: 0; font-size: 17px; line-height: 2.1; max-width: 520px; }
+  #surprise p.closing { margin: 0; font-family: 'Amiri', serif; font-style: italic; font-size: 22px; color: #C98098; }
+  #surprise p.signature { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+  .confetti-piece {
+    position: fixed; top: -12px; border-radius: 2px; z-index: 999;
+    animation: fall linear forwards;
+  }
+  @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0.9; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    #cover, #surprise, .confetti-piece { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div id="cover">
+    <div class="gift" aria-hidden="true">
+      <div class="lid"></div>
+      <div class="box"></div>
+      <div class="ribbon-v"></div>
+      <div class="ribbon-h"></div>
+    </div>
+    <p class="eyebrow">يا أمي الغالية</p>
+    <h1>لديكِ مفاجأة صغيرة في انتظارك</h1>
+    <button class="cta" id="revealBtn" type="button">اضغطي هنا</button>
+  </div>
+
+  <div id="surprise">
+    <div class="hearts" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <svg width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    </div>
+
+    <div>
+      <p class="eyebrow">عيد ميلاد سعيد</p>
+      <h2>أمي الغالية عائشة</h2>
+    </div>
+
+    <div aria-hidden="true">
+      <div class="candles">
+        <div class="candle short"><div class="flame"></div></div>
+        <div class="candle tall"><div class="flame"></div></div>
+        <div class="candle short"><div class="flame"></div></div>
+      </div>
+      <div class="tier-top"></div>
+      <div class="tier-bottom"></div>
+    </div>
+
+    <div class="age-card">
+      <div class="age-number">53</div>
+      <div class="age-label">
+        <div class="big">سنة</div>
+        <div class="small">من الحب والعطاء بلا حدود</div>
+      </div>
+    </div>
+
+    <p class="message">
+      كل سنة وأنتِ طيبة يا أغلى أم في الوجود. منذ عام 1973 وأنتِ نور بيتنا، وسر كل ابتسامة فينا. اليوم نحتفل بقلبك الكبير، وصبرك الذي لا ينضب، وحنانك الذي ما تغيّر يوماً. نتمنى لك عمراً مديداً مليئاً بالصحة والسعادة، وأن تبقي دائماً بيننا بهذا النور وهذا الجمال.
+    </p>
+
+    <p class="closing">كل عام وأنتِ بخير يا أغلى عائشة</p>
+    <p class="signature">بكل الحب</p>
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('revealBtn');
+    var cover = document.getElementById('cover');
+    var surprise = document.getElementById('surprise');
+    var fired = false;
+
+    function confetti() {
+      var colors = ['#D98A9E', '#C9A15A', '#F3C9D4', '#E8A33D', '#B5748A'];
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var count = reduced ? 0 : 60;
+      for (var i = 0; i < count; i++) {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = (Math.random() * 100) + 'vw';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        var size = (Math.random() * 6 + 6) + 'px';
+        piece.style.width = size;
+        piece.style.height = size;
+        piece.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+        piece.style.animationDelay = (Math.random() * 0.4) + 's';
+        document.body.appendChild(piece);
+        (function (el) { setTimeout(function () { el.remove(); }, 4200); })(piece);
+      }
+    }
+
+    function reveal() {
+      if (fired) return;
+      fired = true;
+      cover.classList.add('hide');
+      setTimeout(function () {
+        cover.style.display = 'none';
+        surprise.classList.add('show');
+        confetti();
+      }, 550);
+    }
+
+    btn.addEventListener('click', reveal);
+  })();
+</script>
+</body>
+</html>
